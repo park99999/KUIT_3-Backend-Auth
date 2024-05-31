@@ -12,4 +12,5 @@ public class JwtMalformedTokenException extends JwtUnauthorizedTokenException {
         super(exceptionStatus);
         this.exceptionStatus = exceptionStatus;
     }
+
 }

@@ -21,9 +21,10 @@ public class AuthService {
 
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
-    private final JwtProvider jwtProvider;
+    private final JwtProvider JwtProvider;
 
     public LoginResponse login(LoginRequest authRequest) {
+        log.info("[AuthService.login]");
 
         String email = authRequest.getEmail();
 
@@ -39,7 +40,7 @@ public class AuthService {
         validatePassword(authRequest.getPassword(), userId);
 
         // TODO: 3. JWT 갱신
-        String updatedJwt = jwtProvider.createToken(email, userId);
+        String updatedJwt = JwtProvider.createToken(email, userId);
 
         return new LoginResponse(userId, updatedJwt);
     }
@@ -50,13 +51,8 @@ public class AuthService {
             throw new UserException(PASSWORD_NO_MATCH);
         }
     }
-
-    public long getUserIdByEmail(String email) {
-        try {
+    public long getUserIdByEmail(String email){
             return userDao.getUserIdByEmail(email);
-        } catch (IncorrectResultSizeDataAccessException e) {
-            throw new JwtUnauthorizedTokenException(TOKEN_MISMATCH);
-        }
     }
 
 }

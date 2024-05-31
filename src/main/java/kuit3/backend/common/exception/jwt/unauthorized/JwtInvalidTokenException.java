@@ -12,4 +12,5 @@ public class JwtInvalidTokenException extends JwtUnauthorizedTokenException {
         super(exceptionStatus);
         this.exceptionStatus = exceptionStatus;
     }
+
 }

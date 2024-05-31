@@ -15,4 +15,5 @@ public class PostLoginRequest {
 
     @NotBlank(message = "password: {NotBlank}")
     private String password;
+
 }

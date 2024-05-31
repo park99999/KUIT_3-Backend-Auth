@@ -17,4 +17,5 @@ public class UserException extends RuntimeException {
         super(message);
         this.exceptionStatus = exceptionStatus;
     }
+
 }

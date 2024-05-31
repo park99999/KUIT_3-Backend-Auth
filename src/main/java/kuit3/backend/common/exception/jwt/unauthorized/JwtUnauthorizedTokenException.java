@@ -12,4 +12,5 @@ public class JwtUnauthorizedTokenException extends RuntimeException {
         super(exceptionStatus.getMessage());
         this.exceptionStatus = exceptionStatus;
     }
+
 }
