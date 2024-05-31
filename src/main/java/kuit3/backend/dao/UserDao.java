@@ -91,14 +91,15 @@ public class UserDao {
         return jdbcTemplate.update(sql, param);
     }
 
-    public List<GetUserResponse> getUsers(String nickname, String email, String status) {
+    public List<GetUserResponse> getUsers(String nickname, String email, String status, long last_id) {
         String sql = "select email, phone, username, status from user " +
-                "where username like :username and email like :email and status=:status";
+                "where username like :username and email like :email and status=:status and userid > :last_id LIMIT 2";
 
         Map<String, Object> param = Map.of(
                 "username", "%" + nickname + "%",
                 "email", "%" + email + "%",
-                "status", status);
+                "status", status,
+                "last_id",last_id);
 
         return jdbcTemplate.query(sql, param,
                 (rs, rowNum) -> new GetUserResponse(

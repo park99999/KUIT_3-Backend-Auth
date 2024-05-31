@@ -89,9 +89,9 @@ public class UserService {
             throw new DatabaseException(DATABASE_ERROR);
         }
     }
-    public List<GetUserResponse> getUsers(String nickname, String email, String status) {
+    public List<GetUserResponse> getUsers(String nickname, String email, String status,long last_id) {
         log.info("[UserService.getUsers]");
-        return userDao.getUsers(nickname, email, status);
+        return userDao.getUsers(nickname, email, status,last_id);
     }
 
     private void validateEmail(String email) {
