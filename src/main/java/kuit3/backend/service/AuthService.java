@@ -27,7 +27,7 @@ public class AuthService {
         log.info("[AuthService.login]");
 
         String email = authRequest.getEmail();
-
+        log.info(email);
         // TODO: 1. 이메일 유효성 확인
         long userId;
         try {

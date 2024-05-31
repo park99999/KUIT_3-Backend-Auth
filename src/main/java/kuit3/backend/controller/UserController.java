@@ -1,5 +1,6 @@
 package kuit3.backend.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kuit3.backend.common.exception.UserException;
 import kuit3.backend.common.response.BaseResponse;
 import kuit3.backend.dto.user.*;
@@ -40,8 +41,9 @@ public class UserController {
      * 회원 휴면
      */
     @PatchMapping("/{userId}/dormant")
-    public BaseResponse<Object> modifyUserStatus_dormant(@PathVariable long userId) {
+    public BaseResponse<Object> modifyUserStatus_dormant(HttpServletRequest request) {
         log.info("[UserController.modifyUserStatus_dormant]");
+        long userId = (long) request.getAttribute("userId");
         userService.modifyUserStatus_dormant(userId);
         return new BaseResponse<>(null);
     }
