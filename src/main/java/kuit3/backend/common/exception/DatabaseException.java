@@ -4,7 +4,7 @@ import kuit3.backend.common.response.status.ResponseStatus;
 import lombok.Getter;
 
 @Getter
-public class DatabaseException extends RuntimeException{
+public class DatabaseException extends RuntimeException {
 
     private final ResponseStatus exceptionStatus;
 
@@ -12,4 +12,5 @@ public class DatabaseException extends RuntimeException{
         super(exceptionStatus.getMessage());
         this.exceptionStatus = exceptionStatus;
     }
+
 }

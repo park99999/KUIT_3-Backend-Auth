@@ -55,7 +55,7 @@ public class JwtProvider {
         } catch (IllegalArgumentException e) {
             throw new JwtInvalidTokenException(INVALID_TOKEN);
         } catch (JwtException e) {
-            log.error("[JwtTokenProvider.validateAccessToken]", e);
+            log.error("[JwtProvider.validateAccessToken]", e);
             throw e;
         }
     }

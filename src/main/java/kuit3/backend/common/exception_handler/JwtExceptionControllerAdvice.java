@@ -28,4 +28,5 @@ public class JwtExceptionControllerAdvice {
         log.error("[handle_JwtUnauthorizedException]", e);
         return new BaseErrorResponse(e.getExceptionStatus());
     }
+
 }

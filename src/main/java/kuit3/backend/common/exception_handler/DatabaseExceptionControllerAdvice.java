@@ -31,4 +31,5 @@ public class DatabaseExceptionControllerAdvice {
         log.error("[handle_DataAccessException]", e);
         return new BaseErrorResponse(DATABASE_ERROR);
     }
+
 }

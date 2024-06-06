@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 
@@ -22,10 +22,10 @@ public class UserService {
 
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
-    private final JwtProvider jwtProvider;
+    private final JwtProvider JwtProvider;
 
-    @Transactional
     public PostUserResponse signUp(PostUserRequest postUserRequest) {
+        log.info("[UserService.createUser]");
 
         // TODO: 1. validation (중복 검사)
         validateEmail(postUserRequest.getEmail());
@@ -42,35 +42,56 @@ public class UserService {
         long userId = userDao.createUser(postUserRequest);
 
         // TODO: 4. JWT 토큰 생성
-        String jwt = jwtProvider.createToken(postUserRequest.getEmail(), userId);
+        String jwt = JwtProvider.createToken(postUserRequest.getEmail(), userId);
 
         return new PostUserResponse(userId, jwt);
     }
 
-    public void modifyUserStatus_deleted(long userId) {
-        int affectedRows = userDao.modifyUserStatus_deleted(userId);
-        if (affectedRows != 1) {
-            throw new DatabaseException(DATABASE_ERROR);
-        }
-    }
-
     public void modifyUserStatus_dormant(long userId) {
+        log.info("[UserService.modifyUserStatus_dormant]");
+        validateDormant(userId);
         int affectedRows = userDao.modifyUserStatus_dormant(userId);
         if (affectedRows != 1) {
             throw new DatabaseException(DATABASE_ERROR);
         }
     }
 
+
+
+    public void modifyUserStatus_deleted(long userId) {
+        log.info("[UserService.modifyUserStatus_deleted]");
+
+        int affectedRows = userDao.modifyUserStatus_deleted(userId);
+        if (affectedRows != 1) {
+            throw new DatabaseException(DATABASE_ERROR);
+        }
+    }
+
     public void modifyNickname(long userId, String nickname) {
+        log.info("[UserService.modifyNickname]");
+
         validateNickname(nickname);
         int affectedRows = userDao.modifyNickname(userId, nickname);
         if (affectedRows != 1) {
             throw new DatabaseException(DATABASE_ERROR);
         }
     }
-
-    public List<GetUserResponse> getUsers(String nickname, String email, String status) {
-        return userDao.getUsers(nickname, email, status);
+    public void modifyUserInfo(long userId, PutUserInfoRequest putUserInfoRequest) {
+        validateEmail(putUserInfoRequest.getEmail());
+        String nickname = putUserInfoRequest.getNickname();
+        if (nickname != null) {
+            validateNickname(putUserInfoRequest.getNickname());
+        }
+        String encodedPassword = passwordEncoder.encode(putUserInfoRequest.getPassword());
+        putUserInfoRequest.resetPassword(encodedPassword);
+        int affectedRows = userDao.modifyUserInfo(userId, putUserInfoRequest);
+        if (affectedRows != 1) {
+            throw new DatabaseException(DATABASE_ERROR);
+        }
+    }
+    public List<GetUserResponse> getUsers(String nickname, String email, String status,long last_id) {
+        log.info("[UserService.getUsers]");
+        return userDao.getUsers(nickname, email, status,last_id);
     }
 
     private void validateEmail(String email) {
@@ -84,4 +105,11 @@ public class UserService {
             throw new UserException(DUPLICATE_NICKNAME);
         }
     }
+    private void validateDormant(long userId) {
+        if(userDao.hasAlreadyDormant(userId)){
+            throw new UserException(ALREADY_DORMANT);
+        }
+    }
+
+
 }

@@ -12,4 +12,5 @@ public class JwtNoTokenException extends JwtBadRequestException {
         super(exceptionStatus);
         this.exceptionStatus = exceptionStatus;
     }
+
 }

@@ -9,4 +9,5 @@ public class PostLoginResponse {
 
     private long userId;
     private String jwt;
+
 }
